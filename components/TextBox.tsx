@@ -19,10 +19,12 @@ const TextBox: React.FC = () => {
 			<Content>
 				{state.words.length > 0 ? (
 					<Words>
-						{state.words.map((word, index) => {
+						{state.words.slice(0, state.currentWord + 30).map((word, index) => {
 							return (
 								<Word
-									data-currentword={state.typingStatus[index] === TypingStatus.CURRENT}
+									{...(state.typingStatus[index] === TypingStatus.CURRENT
+										? { "data-currentword": "true" }
+										: {})}
 									wrong={state.typingStatus[index] === TypingStatus.WRONG}
 									highlighted={state.typingStatus[index] === TypingStatus.CURRENT}
 									correct={state.typingStatus[index] === TypingStatus.CORRECT}
