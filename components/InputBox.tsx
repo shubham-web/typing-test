@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useAppState, useDispatch } from "../data";
 import { ActionTypes } from "../data/appReducer";
 import { TypingStatus } from "../data/defaultState";
+import CoolBox from "./CoolBox";
 interface Props {
 	handleFinished: () => void;
 }
@@ -57,13 +58,15 @@ const InputBox: React.FC<Props> = ({ handleFinished }) => {
 	};
 	return (
 		<Wrapper>
-			<WordInput
-				value={text}
-				autoFocus
-				placeholder={state.dirty ? "" : "Start Typing"}
-				onChange={handleInputChange}
-				onKeyDown={handleKeyDown}
-			/>
+			<CoolBox radius="1rem">
+				<WordInput
+					value={text}
+					autoFocus
+					placeholder={state.dirty ? "" : "Start Typing"}
+					onChange={handleInputChange}
+					onKeyDown={handleKeyDown}
+				/>
+			</CoolBox>
 		</Wrapper>
 	);
 };
@@ -74,22 +77,24 @@ const Wrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	padding-top: 1rem;
+	width: 50%;
+	margin: 0 auto;
+	@media (max-width: 768px) {
+		width: 90%;
+	}
 `;
 const WordInput = styled.input`
-	border: 1px solid rgba(69, 80, 97, 0.8);
+	border: 1px ridge rgba(69, 80, 97, 0.8);
 	border-radius: 1rem;
 	font-size: 1.5rem;
 	padding: 1.25rem 1.6rem;
 	outline: none;
-	background-color: rgb(0, 0, 0);
+	background-color: transparent;
 	color: #70839f;
 	font-family: var(--default-font);
-	box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), 0 0 5px rgba(255, 255, 255, 0.2);
-	width: 60%;
+	/* box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2), 0 0 5px rgba(255, 255, 255, 0.2); */
+	width: 100%;
 	&:focus {
-		box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-	}
-	@media (max-width: 768px) {
-		width: 90%;
+		/* box-shadow: 0 0 5px rgba(255, 255, 255, 0.2); */
 	}
 `;

@@ -67,7 +67,7 @@ const Blinking = keyframes`
 const Timer = styled.span<{
 	blinking: boolean;
 }>`
-	color: #444500;
+	color: #6a6b00;
 	font-size: 1.5rem;
 	${(props) =>
 		props.blinking &&
