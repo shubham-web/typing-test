@@ -2,6 +2,7 @@ import React, { KeyboardEvent, KeyboardEventHandler, useCallback, useEffect, use
 import styled from "styled-components";
 import { useAppState } from "../data";
 import { TypingStatus } from "../data/defaultState";
+import { RefreshIcon } from "../src/svgs/common";
 import { getPercentage } from "../utils";
 import CoolBox from "./CoolBox";
 
@@ -61,11 +62,12 @@ const ResultScreen: React.FC<Props> = ({ handleRefresh }) => {
 				<Accuracy>{result.accuracy}% Accuracy</Accuracy>
 				<Result>
 					{result.accuracy > 80 ? "Awesome!" : "Uh oh!"} You {result.accuracy < 80 ? "only" : ""} typed{" "}
-					{result.correct} words correctly out of {result.correct + result.wrong}, with {result.wpm} words per
-					minute speed.
-					<br /> Your accuracy was {result.accuracy}%. {result.accuracy > 85 ? "Congratulations!" : ""}
+					{result.correct} out of {result.correct + result.wrong} words correctly.{" "}
+					{result.accuracy > 80 ? "🎉" : ":("}
 				</Result>
-				<RestartButton onClick={handleRefresh}>Press &quot;Enter&quot; to Start Another Test</RestartButton>
+				<RestartButton onClick={handleRefresh}>
+					<RefreshIcon width={30} height={30} fill="#5a5a5a" />
+				</RestartButton>
 			</Content>
 		</CoolBox>
 	);
@@ -82,24 +84,29 @@ const Result = styled.h1`
 	font-size: 1.25rem;
 	color: #99a9c2;
 	text-align: center;
+	margin: 1.75rem 0;
+	color: #7b889d;
 `;
 const Wpm = styled.span`
 	font-size: 3rem;
 	margin-right: 1rem;
+	color: dodgerblue;
 `;
 const Accuracy = styled.span`
-	font-size: 2rem;
-	opacity: 0.6;
+	font-size: 1.5rem;
+	margin: 0;
 `;
 const RestartButton = styled.button`
 	font-size: 1.5rem;
 	font-family: var(--default-font);
-	padding: 0.6rem 1rem;
-	border-radius: 0.5rem;
+	padding: 1rem;
+	line-height: 0;
+	border-radius: 1rem;
 	border: none;
-	color: #99a9c2;
-	background-color: #000000;
+	background-color: transparent;
 	outline: none;
+	color: #99a9c2;
+	border: 1px solid #99a9c250;
 `;
 
 export default ResultScreen;
