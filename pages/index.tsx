@@ -3,6 +3,7 @@ import Head from "next/head";
 import NextImage from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import Credits from "../components/Credits";
 import InputBox from "../components/InputBox";
 import ResultScreen from "../components/ResultScreen";
 import Stats from "../components/Stats";
@@ -69,6 +70,7 @@ const Home: NextPage = () => {
 					</>
 				)}
 			</Wrapper>
+			<Credits />
 		</>
 	);
 };
