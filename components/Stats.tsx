@@ -1,11 +1,46 @@
-import styled from "styled-components";
+import { useEffect } from "react";
+import styled, { css, keyframes } from "styled-components";
+import { useAppState, useDispatch } from "../data";
+import { ActionTypes } from "../data/appReducer";
 import { RefreshIcon } from "../src/svgs/common";
+import { getTimerLabel } from "../utils";
 
-const Stats: React.FC = () => {
+interface Props {
+	handleRefresh: () => void;
+}
+const Stats: React.FC<Props> = ({ handleRefresh }) => {
+	const state = useAppState();
+	const dispatch = useDispatch();
+
+	// Start Timer when user starts typing (i.e. state is dirty)
+	useEffect(() => {
+		if (state.dirty && state.timer.id === 0) {
+			let timerId = window.setInterval(() => {
+				dispatch({ type: ActionTypes.CHANGE_REMAINING_TIME, payload: -1 });
+			}, 1000);
+			dispatch({ type: ActionTypes.SET_TIMER, payload: { id: timerId } });
+		}
+
+		// Terminate timer when another test is initialized
+		if (!state.dirty && state.timer.id) {
+			let timerId = state.timer.id;
+			window.clearInterval(timerId);
+			dispatch({ type: ActionTypes.SET_TIMER, payload: { id: 0 } });
+		}
+	}, [state.dirty, state.timer.id, dispatch]);
+
+	useEffect(() => {
+		if (state.finished && state.timer.id !== 0) {
+			let timerId = state.timer.id;
+			window.clearInterval(timerId);
+			dispatch({ type: ActionTypes.SET_TIMER, payload: { id: 0 } });
+		}
+	}, [state.finished, state.timer.id, dispatch]);
+
 	return (
 		<Wrapper>
-			<Timer>0:48</Timer>
-			<Refresh>
+			<Timer blinking={state.timer.remaining <= 5}>{getTimerLabel(state.timer.remaining)}</Timer>
+			<Refresh onClick={handleRefresh}>
 				<RefreshIcon width={30} height={30} fill="#5a5a5a" />
 			</Refresh>
 		</Wrapper>
@@ -20,9 +55,29 @@ const Wrapper = styled.div`
 	z-index: 1;
 `;
 
-const Timer = styled.span`
+const Blinking = keyframes`
+    from{
+        color: #7b1a1a;
+    }
+    to{
+        color: #c22121;
+    }
+`;
+
+const Timer = styled.span<{
+	blinking: boolean;
+}>`
 	color: #444500;
 	font-size: 1.5rem;
+	${(props) =>
+		props.blinking &&
+		css`
+			animation-name: ${Blinking};
+			animation-duration: 0.4s;
+			animation-timing-function: linear;
+			animation-direction: alternate;
+			animation-iteration-count: 15;
+		`}
 `;
 
 const Refresh = styled.button`

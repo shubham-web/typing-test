@@ -1,19 +1,31 @@
+import { useEffect } from "react";
 import styled, { css } from "styled-components";
-import { getWords } from "../utils";
-const TEXT = `We've just begun to learn about the water and its secrets, just as we've only touched on
-outer space. We don't entirely rule out the possibility that there might`;
+import { useAppState } from "../data";
+import { TypingStatus } from "../data/defaultState";
+import CoolBox from "./CoolBox";
+
 const TextBox: React.FC = () => {
+	let state = useAppState();
+
+	useEffect(() => {
+		let currentWordNode = document.querySelector(`[data-currentword="true"]`);
+		if (currentWordNode) {
+			currentWordNode.scrollIntoView(true);
+		}
+	}, [state.currentWord]);
+
 	return (
-		<Border>
-			<Background>
-				<Content>
+		<CoolBox>
+			<Content>
+				{state.words.length > 0 ? (
 					<Words>
-						{getWords(TEXT).map((word, index) => {
+						{state.words.map((word, index) => {
 							return (
 								<Word
-									wrong={word === "begun"}
-									highlighted={word === "about"}
-									correct={index <= 4}
+									data-currentword={state.typingStatus[index] === TypingStatus.CURRENT}
+									wrong={state.typingStatus[index] === TypingStatus.WRONG}
+									highlighted={state.typingStatus[index] === TypingStatus.CURRENT}
+									correct={state.typingStatus[index] === TypingStatus.CORRECT}
 									key={index}
 								>
 									{word}
@@ -21,24 +33,17 @@ const TextBox: React.FC = () => {
 							);
 						})}
 					</Words>
-				</Content>
-			</Background>
-		</Border>
+				) : (
+					"Loading…"
+				)}
+			</Content>
+		</CoolBox>
 	);
 };
 export default TextBox;
 
-const Border = styled.div`
-	z-index: 2;
-	padding: 1px;
-	background-image: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgb(33, 38, 47) 100%);
-	border-radius: 3rem;
-`;
-const Background = styled.div`
-	background-color: #0d1117;
-	border-radius: 3rem;
-`;
 const Content = styled.div`
+	user-select: none;
 	color: #465d80;
 	padding: 3rem;
 	font-size: 1.8rem;
@@ -47,6 +52,10 @@ const Content = styled.div`
 const Words = styled.div`
 	display: flex;
 	flex-wrap: wrap;
+	max-height: 9rem;
+	line-height: 3rem;
+	overflow: hidden;
+	scroll-behavior: smooth;
 `;
 const Word = styled.div<{
 	highlighted?: boolean;
@@ -59,8 +68,9 @@ const Word = styled.div<{
 	${(props) =>
 		props.highlighted &&
 		css`
-			color: #70839f;
+			color: #99a9c2;
 			background-color: #000000;
+			box-shadow: 0 0 3px #ffffff20;
 		`}
 
 	${(props) =>

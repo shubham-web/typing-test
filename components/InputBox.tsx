@@ -1,8 +1,69 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-const InputBox: React.FC = () => {
+import { useAppState, useDispatch } from "../data";
+import { ActionTypes } from "../data/appReducer";
+import { TypingStatus } from "../data/defaultState";
+interface Props {
+	handleFinished: () => void;
+}
+const InputBox: React.FC<Props> = ({ handleFinished }) => {
+	const [text, setText] = useState("");
+	const state = useAppState();
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (state.dirty === false) {
+			// clear input text on test refresh
+			setText("");
+		}
+	}, [state.dirty]);
+
+	const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		let value = e.target.value.trim();
+		if (value.length > 0 && !state.dirty) {
+			dispatch({ type: ActionTypes.SET_DIRTY, payload: true });
+		}
+		setText(value);
+	};
+
+	const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
+		let isCharacterKey = e.key.length === 1;
+
+		let value = text.concat(isCharacterKey ? e.key : "").trim();
+
+		if ([" ", "Enter"].includes(e.key) && value.length > 0) {
+			e.preventDefault();
+
+			let correct = value === state.words[state.currentWord];
+
+			const finished = state.currentWord === state.words.length - 1;
+
+			// Change color of word depending on correctness
+			dispatch({
+				type: ActionTypes.SET_WORD_STATUS,
+				index: state.currentWord,
+				status: correct ? TypingStatus.CORRECT : TypingStatus.WRONG,
+			});
+
+			// Set current word to the next word
+			dispatch({ type: ActionTypes.SET_WORD_STATUS, index: state.currentWord + 1, status: TypingStatus.CURRENT });
+
+			setText("");
+
+			if (finished) {
+				handleFinished();
+			}
+		}
+	};
 	return (
 		<Wrapper>
-			<WordInput autoFocus placeholder="Start Typing" />
+			<WordInput
+				value={text}
+				autoFocus
+				placeholder={state.dirty ? "" : "Start Typing"}
+				onChange={handleInputChange}
+				onKeyDown={handleKeyDown}
+			/>
 		</Wrapper>
 	);
 };
@@ -27,5 +88,8 @@ const WordInput = styled.input`
 	width: 60%;
 	&:focus {
 		box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+	}
+	@media (max-width: 768px) {
+		width: 90%;
 	}
 `;
