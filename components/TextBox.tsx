@@ -10,7 +10,7 @@ const TextBox: React.FC = () => {
 	useEffect(() => {
 		let currentWordNode = document.querySelector(`[data-currentword="true"]`);
 		if (currentWordNode) {
-			currentWordNode.scrollIntoView(true);
+			currentWordNode.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
 		}
 	}, [state.currentWord]);
 
@@ -19,7 +19,7 @@ const TextBox: React.FC = () => {
 			<Content>
 				{state.words.length > 0 ? (
 					<Words>
-						{state.words.slice(0, state.currentWord + 30).map((word, index) => {
+						{state.words.slice(0, state.currentWord + 40).map((word, index) => {
 							return (
 								<Word
 									{...(state.typingStatus[index] === TypingStatus.CURRENT
@@ -57,7 +57,6 @@ const Words = styled.div`
 	max-height: 9rem;
 	line-height: 3rem;
 	overflow: hidden;
-	scroll-behavior: smooth;
 `;
 const Word = styled.div<{
 	highlighted?: boolean;
@@ -72,7 +71,7 @@ const Word = styled.div<{
 		css`
 			color: #99a9c2;
 			background-color: #000000;
-			box-shadow: 0 0 3px #ffffff20;
+			box-shadow: inset 0 0 3px #ffffff20;
 		`}
 
 	${(props) =>

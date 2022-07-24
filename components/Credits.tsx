@@ -6,13 +6,13 @@ const Credits: React.FC = () => {
 		<Wrapper>
 			<CoolBox radius="2rem 2rem 0 0">
 				<Content>
-					<a href="https://github.com/shubham-web/typing-test" target="_blank" rel="noreferrer">
-						<Button>GitHub</Button>
+					<a tabIndex={-1} href="https://github.com/shubham-web/typing-test" target="_blank" rel="noreferrer">
+						<Button>Code</Button>
 					</a>
-					<a href="https://twitter.com/shubhamp_web" target="_blank" rel="noreferrer">
+					<a tabIndex={-1} href="https://twitter.com/shubhamp_web" target="_blank" rel="noreferrer">
 						<Button>Twitter</Button>
 					</a>
-					<a href="https://www.buymeacoffee.com/shubhamp" target="_blank" rel="noreferrer">
+					<a tabIndex={-1} href="https://www.buymeacoffee.com/shubhamp" target="_blank" rel="noreferrer">
 						<Button>Support</Button>
 					</a>
 				</Content>
@@ -48,11 +48,19 @@ const Button = styled.button`
 	background: rgba(255, 255, 255, 0.1);
 	border-radius: 1rem;
 	border: 0.1rem ridge #4b5e7c;
+	border-top: none;
+	border-left: none;
 	font-size: 1rem;
 	font-family: var(--default-font);
 	color: #88a5d3;
-	&:hover {
+	&:hover,
+	&:focus {
 		color: lightblue;
+	}
+
+	outline: none;
+	&:focus {
+		box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
 	}
 `;
 const Content = styled.div`

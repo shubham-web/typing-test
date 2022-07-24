@@ -83,15 +83,16 @@ const Timer = styled.span<{
 const Refresh = styled.button`
 	background-color: transparent;
 	border: none;
-	outline: none;
 	border-radius: 0.5rem;
-	padding: 0.5rem 0.85rem;
+	padding: 0.5rem;
+	line-height: 0;
 	transition: background-color 0.3s;
 	&:hover {
 		background-color: #0d1117;
 	}
+	outline: none;
 	&:focus {
-		box-shadow: inset 0 0 3px rgba(255, 255, 255, 0.2);
+		box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.2);
 	}
 `;
 export default Stats;
