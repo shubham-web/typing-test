@@ -1,5 +1,5 @@
 ## Typing Test
 
-### 60 seconds typing test with motivation (not really) quotes.
+### 60 seconds typing test with quotes.
 
-![image](https://user-images.githubusercontent.com/52674815/180609234-b41dfe8f-f55b-4924-b1eb-eab495351aeb.png)
+![image](https://user-images.githubusercontent.com/52674815/180631245-f8c45351-fd9d-4c8d-93fc-4b00ee5205fd.png)
